@@ -37,7 +37,7 @@ const (
 func runBuiltin(ctx context.Context, invocation *builderInvocation) error {
 	switch invocation.derivation.Builder {
 	case builtinBuilderPrefix + "fetchurl":
-		if err := fetchURLs(ctx, invocation.derivation, invocation.realStoreDir); err != nil {
+		if err := fetchURL(ctx, invocation.derivation, invocation.realStoreDir); err != nil {
 			fmt.Fprintf(invocation.logWriter, "%s: %v\n", invocation.derivation.Builder, err)
 			return builderFailure{fmt.Errorf("%s failed", invocation.derivation.Builder)}
 		}
@@ -53,7 +53,7 @@ func runBuiltin(ctx context.Context, invocation *builderInvocation) error {
 	}
 }
 
-func fetchURLs(ctx context.Context, drv *zbstore.Derivation, realStoreDir string) error {
+func fetchURL(ctx context.Context, drv *zbstore.Derivation, realStoreDir string) error {
 	href := drv.Env["url"]
 	hrefs := drv.Env["urls"]
 	var urls []string
@@ -68,7 +68,7 @@ func fetchURLs(ctx context.Context, drv *zbstore.Derivation, realStoreDir string
 	var err error
 	for i := 0; i < len(urls); i++ {
 		href = urls[i]
-		err = fetchURL(ctx, drv, realStoreDir, href)
+		err = getURL(ctx, drv, realStoreDir, href)
 		if err == nil {
 			break
 		}
@@ -77,7 +77,7 @@ func fetchURLs(ctx context.Context, drv *zbstore.Derivation, realStoreDir string
 	return err
 }
 
-func fetchURL(ctx context.Context, drv *zbstore.Derivation, realStoreDir string, href string) error {
+func getURL(ctx context.Context, drv *zbstore.Derivation, realStoreDir string, href string) error {
 	outputPath := drv.Env[zbstore.DefaultDerivationOutputName]
 	if outputPath == "" {
 		return fmt.Errorf("missing %s environment variable", zbstore.DefaultDerivationOutputName)
