@@ -73,6 +73,8 @@ func ParseDerivation(dir Directory, name string, data []byte) (*Derivation, erro
 	return drv, nil
 }
 
+// NOTE(oz): Check this out, this might be what I need to make teh store path after downloading.
+
 // Export marshals the derivation to a NAR containing ATerm format
 // and computes the derivation's store metadata using the given hashing algorithm.
 //

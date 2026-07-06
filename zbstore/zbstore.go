@@ -51,6 +51,9 @@ type Object interface {
 	Trailer() *ExportTrailer
 }
 
+// NOTE(oz): does not match content (computed fixed:sha256:1hhv62wrz1xvv6nv4shslab27s0gybb8qpnmn2ppsp4in7s7hk7f)
+// comes from VerifyObject, but where is that computed value made?
+
 // VerifyObject returns an error if the store object's content
 // does not match its path or its content address.
 // opts.Digest is ignored: obj.Trailer().StorePath.Digest() will always be used.
@@ -62,6 +65,7 @@ func VerifyObject(ctx context.Context, obj Object, opts *ContentAddressOptions) 
 		}
 	}(trailer.StorePath)
 
+	// NOTE(oz):ok, looks like we get the value
 	computed, err := computeObjectAddress(ctx, obj, opts)
 	if err != nil {
 		return err
@@ -147,7 +151,9 @@ func computeObjectAddress(ctx context.Context, obj Object, opts *ContentAddressO
 		if hdr.Mode&0o111 != 0 {
 			return ContentAddress{}, fmt.Errorf("must not be executable")
 		}
+		// NOTE(oz): I think this grabs a 256 hasher
 		h := nix.NewHasher(trailer.ContentAddress.Hash().Type())
+		// NOTE(oz): I think this is going to do a 256 hash, or something like that
 		if _, err := io.Copy(h, nr); err != nil {
 			return ContentAddress{}, err
 		}

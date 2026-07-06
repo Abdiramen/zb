@@ -128,7 +128,9 @@ func (eval *Eval) derivationFunction(ctx context.Context, l *lua.State) (int, er
 				return 0, fmt.Errorf("name argument: %v expected, got %v", lua.TypeString, typ)
 			}
 			drv.Name, _ = l.ToString(-1)
-			if _, err := eval.storeDir.Object("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-" + drv.Name); err != nil {
+			path, err := eval.storeDir.Object("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-" + drv.Name)
+			fmt.Printf("\n\n\n=============xxxxxxxxxxxx============ %s\n\n\n", path.Name())
+			if err != nil {
 				return 0, fmt.Errorf("name argument: %s is an invalid name", lualex.Quote(drv.Name))
 			}
 		case "system":

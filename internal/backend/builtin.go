@@ -57,6 +57,7 @@ func fetchURL(ctx context.Context, drv *zbstore.Derivation, realStoreDir string)
 	if href == "" {
 		return fmt.Errorf("missing url environment variable")
 	}
+	// NOTE(oz): What is this value, and how is it calculated?
 	outputPath := drv.Env[zbstore.DefaultDerivationOutputName]
 	if outputPath == "" {
 		return fmt.Errorf("missing %s environment variable", zbstore.DefaultDerivationOutputName)
@@ -89,6 +90,9 @@ func fetchURL(ctx context.Context, drv *zbstore.Derivation, realStoreDir string)
 	if err != nil {
 		return err
 	}
+
+	// NOTE(oz): For a zb prefetch-url, where is 'f', and how is it calculated?
+	// ok, it's some file from the "output path", but I have no idea what that is...
 	_, err1 := io.Copy(f, resp.Body)
 	err2 := f.Close()
 	if err1 != nil {

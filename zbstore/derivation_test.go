@@ -162,6 +162,7 @@ func TestDerivationExport(t *testing.T) {
 				if diff := cmp.Diff(singleFileNAR(t, test.want), gotNAR); diff != "" {
 					t.Errorf("data (-want +got):\n%s", diff)
 				}
+				t.Logf("====== (%v)", gotTrailer)
 				if diff := cmp.Diff(test.wantTrailer, gotTrailer, transformSortedSet[Path]()); diff != "" {
 					t.Errorf("trailer (-want +got):\n%s", diff)
 				}
